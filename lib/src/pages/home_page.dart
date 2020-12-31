@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../log_in_state.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -29,9 +32,9 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
-              title: Text('Item 2'),
+              title: Text('Cerrar Sesión'),
               onTap: () {
-                Navigator.pop(context);
+                Provider.of<LoginState>(context, listen: false).logout();
               },
             ),
           ],

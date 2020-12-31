@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fontana/src/log_in_state.dart';
+import 'package:provider/provider.dart';
 
-class LogInPage extends StatefulWidget {
-  final Function onLoginSuccess;
-  LogInPage({Key key, this.onLoginSuccess}) : super(key: key);
-
-  @override
-  _LogInPageState createState() => _LogInPageState();
-}
-
-class _LogInPageState extends State<LogInPage> {
+class  LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +12,11 @@ class _LogInPageState extends State<LogInPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Bienvenido'),
+              Text('Bienvenido '),
               RaisedButton(
                 child: Text('Inicia Sesión'),
                 onPressed: () {
-                widget.onLoginSuccess();
+                Provider.of<LoginState>(context, listen: false).login();
               })
             ],
           ),
