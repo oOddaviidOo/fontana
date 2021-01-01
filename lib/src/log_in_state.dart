@@ -4,22 +4,31 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginState with ChangeNotifier {
-  
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential user;
   bool _loggedIn = false;
+  bool _loading = false;
 
   bool isLoggedIn() {
     return _loggedIn;
   }
 
+    bool isLoading() {
+    return _loading;
+  }
+
   void loginGoogle() async {
+    _loading = true;
+    notifyListeners();
+
     user = await _handleGoogleSignIn();
+
+    _loading = false;
     if (user != null) {
       _loggedIn = true;
       notifyListeners();
-      Fluttertoast.showToast(msg: 'Bienvenido '+user.user.displayName);
+      Fluttertoast.showToast(msg: 'Bienvenido ' + user.user.displayName);
     } else {
       _loggedIn = false;
       notifyListeners();
@@ -32,7 +41,8 @@ class LoginState with ChangeNotifier {
     notifyListeners();
   }
 
-  void loginAnonymous() async { //El user no es null pero sus propiedades serán null
+  void loginAnonymous() async {
+    //El user no es null pero sus propiedades serán null
     user = await signInAnonymous();
     if (user != null) {
       _loggedIn = true;

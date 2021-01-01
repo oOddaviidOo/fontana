@@ -8,49 +8,58 @@ class LogInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Bienvenido '),
-              Row(
-                children: [
-                  Column(
-                    children: [
-                      RaisedButton(
-                          child: Text('Inicia sesion anonima'),
-                          onPressed: () {
-                            Provider.of<LoginState>(context, listen: false)
-                                .loginAnonymous();
-                          }),
-                      RaisedButton(
-                          child: Text('Inicia sesion con Google'),
-                          onPressed: () {
-                            Provider.of<LoginState>(context, listen: false)
-                                .loginGoogle();
-                          }),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      RaisedButton(
-                          child: Text('Registrate'),
-                          onPressed: () {
-                            Provider.of<LoginState>(context, listen: false)
-                                .loginGoogle();
-                          }),
-                      RaisedButton(
-                          child: Text('Inicia Sesión'),
-                          onPressed: () {
-                            Provider.of<LoginState>(context, listen: false)
-                                .loginGoogle();
-                          }),
-                    ],
-                  )
-                ],
-              )
-            ],
+        child: Consumer(
+          builder: (BuildContext context, LoginState value, Widget child){
+            if (value.isLoading()) {
+              return CircularProgressIndicator();
+            } else {
+              return child;
+            }
+          },
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Bienvenido '),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        RaisedButton(
+                            child: Text('Inicia sesion anonima'),
+                            onPressed: () {
+                              Provider.of<LoginState>(context, listen: false)
+                                  .loginAnonymous();
+                            }),
+                        RaisedButton(
+                            child: Text('Inicia sesion con Google'),
+                            onPressed: () {
+                              Provider.of<LoginState>(context, listen: false)
+                                  .loginGoogle();
+                            }),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        RaisedButton(
+                            child: Text('Registrate'),
+                            onPressed: () {
+                              Provider.of<LoginState>(context, listen: false)
+                                  .loginGoogle();
+                            }),
+                        RaisedButton(
+                            child: Text('Inicia Sesión'),
+                            onPressed: () {
+                              Provider.of<LoginState>(context, listen: false)
+                                  .loginGoogle();
+                            }),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
