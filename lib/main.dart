@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  bool _loggedIn = false;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginState>(

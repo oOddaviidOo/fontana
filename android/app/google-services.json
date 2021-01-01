@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "320097593767",
+    "firebase_url": "https://fontana-dhc0001.firebaseio.com",
+    "project_id": "fontana-dhc0001",
+    "storage_bucket": "fontana-dhc0001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320097593767:android:1706dadab8e5c283842e82",
+        "android_client_info": {
+          "package_name": "com.dhc.fontana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320097593767-psku7mvsje5ieik0hthhcp8fq3oljl5l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dhc.fontana",
+            "certificate_hash": "5d6e0100966e41a768f80fb139e11f3d586a6b9e"
+          }
+        },
+        {
+          "client_id": "320097593767-olkgi3hliugnp197cnhv06457pskgoqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEi0Gjzz4ClQdeByN6xIlWy5aLHvoWkco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320097593767-olkgi3hliugnp197cnhv06457pskgoqa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "320097593767-vsf9f6oude12boj4fmkavpctr1l5fk5d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dhc.fontana"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
