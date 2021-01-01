@@ -34,7 +34,13 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.exit_to_app),
               title: Text('Cerrar Sesión'),
               onTap: () {
-                Provider.of<LoginState>(context, listen: false).logout();
+                if ( Provider.of<LoginState>(context, listen: false).user.user.isAnonymous
+                ) {
+                  Provider.of<LoginState>(context, listen: false).logoutAnonymous();
+                } else {
+                  Provider.of<LoginState>(context, listen: false).logoutGoogle();
+                }
+                
               },
             ),
           ],

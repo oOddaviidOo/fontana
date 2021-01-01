@@ -1,48 +1,78 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginState with ChangeNotifier {
+  
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  var user;
-
+  UserCredential user;
   bool _loggedIn = false;
+
   bool isLoggedIn() {
     return _loggedIn;
   }
 
-  void login() async {
+  void loginGoogle() async {
     user = await _handleGoogleSignIn();
     if (user != null) {
       _loggedIn = true;
       notifyListeners();
+      Fluttertoast.showToast(msg: 'Bienvenido '+user.user.displayName);
     } else {
       _loggedIn = false;
       notifyListeners();
     }
   }
 
-  void logout() async {
+  void logoutGoogle() async {
     _loggedIn = false;
     _googleSignIn.signOut();
     notifyListeners();
   }
 
-  Future<User> _handleGoogleSignIn() async {
+  void loginAnonymous() async { //El user no es null pero sus propiedades serán null
+    user = await signInAnonymous();
+    if (user != null) {
+      _loggedIn = true;
+      notifyListeners();
+      if (user.user.isAnonymous) {
+        Fluttertoast.showToast(msg: 'Bienvenido usuario anónimo');
+      }
+    } else {
+      _loggedIn = false;
+      notifyListeners();
+    }
+  }
+
+  void logoutAnonymous() async {
+    _loggedIn = false;
+    _auth.signOut();
+    notifyListeners();
+  }
+
+  Future<UserCredential> _handleGoogleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    return await _auth.signInWithCredential(credential);
+    /*final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
     final User user = (await _auth.signInWithCredential(credential)) as User;
     print("Sesion iniciada " + user.displayName);
-    return user;
+    return user;*/
   }
 
-  Future<User> signInAnonymous() async {
+  Future<UserCredential> signInAnonymous() async {
+    UserCredential user = await _auth.signInAnonymously();
+    return user;
+    /*
     try {
       var result = await _auth.signInAnonymously();
       User user = result.user;
@@ -51,6 +81,6 @@ class LoginState with ChangeNotifier {
     } catch (e) {
       print(e.toString());
       return null;
-    }
+    }*/
   }
 }
