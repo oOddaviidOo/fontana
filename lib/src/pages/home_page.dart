@@ -2,7 +2,7 @@ import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../log_in_state.dart';
+import '../states/log_in_state.dart';
 import 'package:Fontana/src/services/user_service.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 

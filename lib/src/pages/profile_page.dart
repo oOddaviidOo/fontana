@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Fontana/src/services/user_service.dart';
 import 'package:provider/provider.dart';
-import '../log_in_state.dart';
+import '../states/log_in_state.dart';
 
 // ignore: must_be_immutable
 class ProfilePage extends StatelessWidget {

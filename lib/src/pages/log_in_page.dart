@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:Fontana/src/log_in_state.dart';
+import 'package:Fontana/src/states/log_in_state.dart';
 import 'package:provider/provider.dart';
 
 class LogInPage extends StatelessWidget {
