@@ -4,6 +4,7 @@ import 'package:Fontana/src/services/user_service.dart';
 import 'package:provider/provider.dart';
 import '../log_in_state.dart';
 
+// ignore: must_be_immutable
 class ProfilePage extends StatelessWidget {
   User user;
   UserService _userService;
