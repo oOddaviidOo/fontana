@@ -5,7 +5,6 @@ import 'package:Fontana/src/log_in_state.dart';
 import 'package:provider/provider.dart';
 
 class LogInPage extends StatelessWidget {
-  var user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
