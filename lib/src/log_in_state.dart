@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginState with ChangeNotifier {
@@ -14,7 +13,7 @@ class LoginState with ChangeNotifier {
     return _loggedIn;
   }
 
-    bool isLoading() {
+  bool isLoading() {
     return _loading;
   }
 
@@ -28,7 +27,6 @@ class LoginState with ChangeNotifier {
     if (user != null) {
       _loggedIn = true;
       notifyListeners();
-      Fluttertoast.showToast(msg: 'Bienvenido ' + user.user.displayName);
     } else {
       _loggedIn = false;
       notifyListeners();
@@ -47,9 +45,6 @@ class LoginState with ChangeNotifier {
     if (user != null) {
       _loggedIn = true;
       notifyListeners();
-      if (user.user.isAnonymous) {
-        Fluttertoast.showToast(msg: 'Bienvenido usuario anónimo');
-      }
     } else {
       _loggedIn = false;
       notifyListeners();
@@ -70,7 +65,9 @@ class LoginState with ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    return await _auth.signInWithCredential(credential);
+    UserCredential user = await _auth.signInWithCredential(credential);
+    
+    return user;
     /*final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 

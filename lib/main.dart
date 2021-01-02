@@ -1,3 +1,4 @@
+import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Fontana/src/log_in_state.dart';
@@ -37,6 +38,9 @@ class _MyAppState extends State<MyApp> {
               } else {
                 return LogInPage();
               }
+            },
+            'profile':(BuildContext context){
+              return ProfilePage();
             }
           }),
     );
