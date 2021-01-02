@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fontana/src/log_in_state.dart';
-import 'package:fontana/src/pages/home_page.dart';
-import 'package:fontana/src/pages/log_in_page.dart';
+import 'package:Fontana/src/log_in_state.dart';
+import 'package:Fontana/src/pages/home_page.dart';
+import 'package:Fontana/src/pages/log_in_page.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
