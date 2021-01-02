@@ -23,7 +23,7 @@ class LogInPage extends StatelessWidget {
           children: <Widget>[
             RichText(
                 text: TextSpan(
-                    text: 'BIENVENIDO A FONTANA',
+                    text: 'BIENVENID@ A FONTANA',
                     style: TextStyle(
                       color: Colors.lightBlueAccent[400],
                       fontSize: 30,
@@ -36,7 +36,7 @@ class LogInPage extends StatelessWidget {
             Divider(),
             RichText(
                 text: TextSpan(
-              text: '¿Inicia sesión para acceder a la app?',
+              text: 'Inicia sesión para acceder a la app',
               style: TextStyle(color: Colors.black, fontSize: 18),
             )),
             Divider(),
