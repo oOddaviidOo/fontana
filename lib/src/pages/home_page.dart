@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _showAppBar = true;
   User user;
   UserService _userService;
   Completer<GoogleMapController> _controller = Completer();
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
+    initMarkers();
     return Scaffold(
         drawer: Drawer(
           child: ListView(
@@ -83,22 +85,51 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Fontana'),
-        ),
+        appBar:AppBar(
+                centerTitle: true,
+                title: Text('Fontana'),
+              ), /*_showAppBar
+            ? AppBar(
+                centerTitle: true,
+                title: Text('Fontana'),
+              )
+            : null,*/
         body: Container(
           child: GoogleMap(
+            //onTap: (LatLng) => setState(() => _showAppBar = !_showAppBar),
             buildingsEnabled: true,
+            compassEnabled: true,
+            mapToolbarEnabled: true,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
             mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-                zoom: 15.0, target: LatLng(39.511720, -0.356001)),
+            initialCameraPosition:
+                CameraPosition(zoom: 5.0, target: LatLng(40.416750, -3.703789)),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
+            markers: markers,
           ),
         ));
+  }
+
+  void initMarkers() {
+    //Inicializa la colección de markers con algunos en código
+    Marker fuente_plaza_almassera = Marker(
+        markerId: MarkerId('0'),
+        position: LatLng(39.511720, -0.356001),
+        infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueAzure,
+        ));
+    markers.add(fuente_plaza_almassera);
+    Marker fuente_parque_almassera = Marker(
+        markerId: MarkerId('1'),
+        position: LatLng(39.509590, -0.354083),
+        infoWindow: InfoWindow(title: 'Fuente parque almassera'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueCyan,
+        ));
+    markers.add(fuente_parque_almassera);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:Fontana/src/states/log_in_state.dart';
 import 'package:Fontana/src/pages/home_page.dart';
 import 'package:Fontana/src/pages/log_in_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -19,7 +20,16 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+Future<void> requestPermission() async {
+  await Permission.location.request();
+}
+
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    requestPermission();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginState>(
@@ -39,11 +49,10 @@ class _MyAppState extends State<MyApp> {
                 return LogInPage();
               }
             },
-            'profile':(BuildContext context){
+            'profile': (BuildContext context) {
               return ProfilePage();
             }
           }),
     );
   }
 }
-
