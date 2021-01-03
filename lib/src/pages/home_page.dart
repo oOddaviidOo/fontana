@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _showAppBar = true;
+  //bool _showAppBar = true;
   User user;
   UserService _userService;
   Completer<GoogleMapController> _controller = Completer();
