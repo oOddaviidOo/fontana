@@ -25,7 +25,7 @@ class LogInPage extends StatelessWidget {
                     text: 'BIENVENID@ A FONTANA',
                     style: TextStyle(
                       color: Colors.lightBlueAccent[400],
-                      fontSize: 30,
+                      fontSize: 25,
                       fontFamily: 'PermanentMarker'
                     ))),
             Image(
