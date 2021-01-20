@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
     requestPermission();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginState>(
