@@ -40,9 +40,12 @@ class _HomePageState extends State<HomePage> {
   //Variables Form
   TextEditingController _editingControllerNom;
   TextEditingController _editingControllerDesc;
+  TextEditingController _editingControllerLat;
+  TextEditingController _editingControllerLon;
   String nombre = "";
   String descripcion = "";
   String estado = "";
+  bool usarUbicacion = true;
 
   //Variables Fuentes
   Map<int, Fuente> fuentes = <int, Fuente>{};
@@ -51,6 +54,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _editingControllerNom = TextEditingController();
     _editingControllerDesc = TextEditingController();
+    _editingControllerLat = TextEditingController();
+    _editingControllerLon = TextEditingController();
   }
 
   /*void dispose() {
@@ -60,6 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     final ref = referenceDatabase.reference();
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
@@ -179,6 +185,7 @@ class _HomePageState extends State<HomePage> {
   }*/
 
   void addFuenteDialog(BuildContext context) {
+    StateSetter _setState;
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -187,52 +194,98 @@ class _HomePageState extends State<HomePage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
             title: Text('Añadir fuente:'),
-            content: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: _editingControllerNom,
-                    decoration: InputDecoration(
-                        hintText: 'Nombre de la Fuente',
-                        labelText: 'Nombre de la fuente',
-                        helperText: 'Ej: Fuente del parque del colegio',
-                        icon: Icon(Icons.account_circle),
-                        //prefixIcon: Icon(Icons.title)
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0))),
-                    onChanged: (String s) {
-                      nombre = s;
-                    },
-                  ),
-                  Divider(),
-                  TextField(
-                    controller: _editingControllerDesc,
-                    decoration: InputDecoration(
-                        hintText: 'Descripción',
-                        labelText: 'Descripción',
-                        helperText: 'Ej: Se encuentra cerca de un banco',
-                        icon: Icon(Icons.account_circle),
-                        //prefixIcon: Icon(Icons.title)
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0))),
-                    onChanged: (String s) {
-                      descripcion = s;
-                    },
-                  ),
-                  Divider(),
-                  Row(
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              _setState = setState;
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Form(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Coordenadas: " +
-                          latitud.toString() +
-                          " " +
-                          longitud.toString())
+                      TextFormField(
+                        controller: _editingControllerNom,
+                        decoration: InputDecoration(
+                            hintText: 'Nombre de la Fuente',
+                            labelText: 'Nombre de la fuente',
+                            helperText: 'Ej: Fuente del parque del colegio',
+                            //icon: Icon(Icons.account_circle),
+                            //prefixIcon: Icon(Icons.title)
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0))),
+                        onChanged: (String s) {
+                          nombre = s;
+                        },
+                      ),
+                      Divider(),
+                      TextFormField(
+                        controller: _editingControllerDesc,
+                        decoration: InputDecoration(
+                            hintText: 'Descripción',
+                            labelText: 'Descripción',
+                            helperText: 'Ej: Se encuentra cerca de un banco',
+                            //icon: Icon(Icons.account_circle),
+                            //prefixIcon: Icon(Icons.title)
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0))),
+                        onChanged: (String s) {
+                          descripcion = s;
+                        },
+                      ),
+                      Divider(),
+                      SwitchListTile(
+                          title: Text('Escribir coordenadas / Usar ubicación'),
+                          value: usarUbicacion,
+                          onChanged: (value) {
+                            setState(() {
+                              usarUbicacion = value;
+                            });
+                          }),
+                      Divider(),
+                      TextFormField(
+                        enabled: usarUbicacion,
+                        controller: _editingControllerLat,
+                        //keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            hintText: 'Latitud',
+                            labelText: 'Latitud',
+                            helperText:
+                                'Ej: Latitud actual: ' + latitud.toString(),
+                            //icon: Icon(Icons.account_circle),
+                            //prefixIcon: Icon(Icons.title)
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0))),
+                        onChanged: (String s) {
+                          double d = double.parse(s);
+                          latitud = d;
+                          Fluttertoast.showToast(msg: latitud.toString());
+                        },
+                      ),
+                      Divider(),
+                      TextFormField(
+                        enabled: usarUbicacion,
+                        controller: _editingControllerLon,
+                        //keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            hintText: 'Longitud',
+                            labelText: 'Longitud',
+                            helperText:
+                                'Ej: Longitud actual: ' + longitud.toString(),
+                            //icon: Icon(Icons.account_circle),
+                            //prefixIcon: Icon(Icons.title)
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0))),
+                        onChanged: (String s) {
+                          double d = double.parse(s);
+                          longitud = d;
+                          Fluttertoast.showToast(msg: longitud.toString());
+                        },
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            }),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
