@@ -2,6 +2,7 @@ import 'package:Fontana/models/fuente.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -295,12 +296,115 @@ class _HomePageState extends State<HomePage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
-            title: Text('Información de la fuente:'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text('Este es el contenido de la caja de la alerta'),
-              ],
+            title: RichText(
+                text: TextSpan(
+              text: f.nombre,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            )),
+            content: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Descripción: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: f.descripcion,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Coordenadas: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: (f.latitud.toString() +
+                                      ", " +
+                                      f.longitud.toString()),
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Estado: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: f.estado,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Añadida por: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: f.creada_por,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             actions: <Widget>[
               FlatButton(
