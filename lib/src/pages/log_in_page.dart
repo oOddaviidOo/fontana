@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:Fontana/src/states/log_in_state.dart';
 import 'package:provider/provider.dart';
+import 'package:Fontana/src/pages/register_page.dart';
+import 'package:Fontana/src/pages/sign_in_page.dart';
 
 class LogInPage extends StatelessWidget {
   @override
@@ -24,10 +26,9 @@ class LogInPage extends StatelessWidget {
                 text: TextSpan(
                     text: 'BIENVENID@ A FONTANA',
                     style: TextStyle(
-                      color: Colors.lightBlueAccent[400],
-                      fontSize: 25,
-                      fontFamily: 'PermanentMarker'
-                    ))),
+                        color: Colors.lightBlueAccent[400],
+                        fontSize: 25,
+                        fontFamily: 'PermanentMarker'))),
             Image(
               image: AssetImage('assets/images/logo1.2.png'),
               width: 200,
@@ -53,7 +54,13 @@ class LogInPage extends StatelessWidget {
             SignInButtonBuilder(
               text: 'Inicio de sesión con email',
               icon: Icons.email,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return SignInPage();
+                  },
+                ));
+              },
               backgroundColor: Colors.blueGrey[700],
               width: 220.0,
             ),
@@ -78,6 +85,11 @@ class LogInPage extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             // navigate to desired screen
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return RegisterPage();
+                              },
+                            ));
                           })
                   ]),
             ),

@@ -22,6 +22,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //Variables
+  bool filtrado = true;
+
   //Variables Database
   final referenceDatabase = FirebaseDatabase.instance;
 
@@ -132,6 +135,20 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Fontana'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    filtrado = !filtrado;
+                  });
+                },
+                child: filtrado
+                    ? Icon(Icons.filter_alt)
+                    : Icon(Icons.filter_alt_outlined)),
+          )
+        ],
       ),
       body: Container(
         child: GoogleMap(

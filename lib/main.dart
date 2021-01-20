@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Fontana/src/states/log_in_state.dart';
 import 'package:Fontana/src/pages/home_page.dart';
+import 'package:Fontana/src/pages/register_page.dart';
+import 'package:Fontana/src/pages/sign_in_page.dart';
 import 'package:Fontana/src/pages/log_in_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +54,12 @@ class _MyAppState extends State<MyApp> {
             },
             'profile': (BuildContext context) {
               return ProfilePage();
+            },
+            'register': (BuildContext context) {
+              return RegisterPage();
+            },
+            'sign_in': (BuildContext context) {
+              return SignInPage();
             }
           }),
     );
