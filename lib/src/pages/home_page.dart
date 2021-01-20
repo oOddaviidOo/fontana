@@ -186,8 +186,10 @@ class _HomePageState extends State<HomePage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
             title: Text('Añadir fuente:'),
-            content: Container(
+            content: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: _editingControllerNom,
@@ -256,13 +258,20 @@ class _HomePageState extends State<HomePage> {
   void addFuente(Fuente f) {
     MarkerId mid = MarkerId(f.id.toString());
     Marker m = Marker(
-        visible: true,
-        markerId: mid,
-        position: LatLng(f.latitud, f.longitud),
-        //infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          checkEstado(f),
-        ));
+      visible: true,
+      markerId: mid,
+      position: LatLng(f.latitud, f.longitud),
+      infoWindow: InfoWindow(
+        title: f.nombre,
+        snippet: "Pulse para ver detalles",
+        onTap: () {
+          infoFuente(context, f);
+        },
+      ),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+        checkEstado(f),
+      ),
+    );
     /*MarkerId mid = MarkerId("1");
     Marker m = Marker(
         markerId: mid,
@@ -278,7 +287,7 @@ class _HomePageState extends State<HomePage> {
 
   //Aqui se debera pasar como parametro el ID de una fuente para
   //modificar la información
-  void infoFuente(BuildContext context) {
+  void infoFuente(BuildContext context, Fuente f) {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -291,7 +300,6 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Este es el contenido de la caja de la alerta'),
-                Image(image: AssetImage('assets/images/logo1.2.png'))
               ],
             ),
             actions: <Widget>[
