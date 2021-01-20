@@ -2,11 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Fuente {
-  String nombre;
-  String descripcion;
+  static int n_fuentes = 0;
+  String nombre = "";
+  String descripcion = "";
   String estado;
-  String latitud;
-  String longitud;
+  double latitud;
+  double longitud;
+  String creada_por;
   int id;
   String get getNombre => nombre;
 
@@ -20,13 +22,13 @@ class Fuente {
 
   set setEstado(String estado) => this.estado = estado;
 
-  String get getLatitud => latitud;
+  double get getLatitud => latitud;
 
-  set setLatitud(String latitud) => this.latitud = latitud;
+  set setLatitud(double latitud) => this.latitud = latitud;
 
-  String get getLongitud => longitud;
+  double get getLongitud => longitud;
 
-  set setLongitud(String longitud) => this.longitud = longitud;
+  set setLongitud(double longitud) => this.longitud = longitud;
 
   int get getId => id;
 
@@ -40,21 +42,28 @@ class Fuente {
             "\nDescripción: " +
             this.descripcion +
             "\nCoordenadas: " +
-            this.latitud +
+            this.latitud.toString() +
             ", " +
-            this.longitud +
+            this.longitud.toString() +
             "\nEstado: " +
             this.estado +
             "\nID: " +
-            this.id.toString());
+            this.id.toString() +
+            "\nCreada por: " +
+            this.creada_por +
+            "\nNumero de fuentes creadas:" +
+            n_fuentes.toString(),
+        toastLength: Toast.LENGTH_LONG);
   }
 
-  Fuente(String n, String d, String la, String lo, User u) {
+  Fuente(String n, String d, double la, double lo, User u) {
     this.nombre = n;
     this.descripcion = d;
     this.estado = "Pendiente de verificación";
     this.latitud = la;
     this.longitud = lo;
-    this.id = 2;
+    this.id = n_fuentes + 1;
+    this.creada_por = u.displayName;
+    n_fuentes++;
   }
 }

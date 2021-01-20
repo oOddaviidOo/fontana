@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   int markers_count;
   MarkerId selectedMarker;
-  String latitud;
-  String longitud;
+  double latitud;
+  double longitud;
 
   //Variables Form
   TextEditingController _editingControllerNom;
@@ -42,6 +42,9 @@ class _HomePageState extends State<HomePage> {
   String nombre = "";
   String descripcion = "";
   String estado = "";
+
+  //Variables Fuentes
+  Map<int, Fuente> fuentes = <int, Fuente>{};
 
   void initState() {
     super.initState();
@@ -218,7 +221,10 @@ class _HomePageState extends State<HomePage> {
                   Divider(),
                   Row(
                     children: [
-                      Text("Coordenadas: " + latitud + " " + longitud)
+                      Text("Coordenadas: " +
+                          latitud.toString() +
+                          " " +
+                          longitud.toString())
                     ],
                   ),
                 ],
@@ -234,6 +240,10 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     Fuente f = new Fuente(
                         nombre, descripcion, latitud, longitud, user);
+                    setState(() {
+                      fuentes[f.id] = f;
+                    });
+                    f.mostrarDatos();
                     addFuente(f);
                     Navigator.of(context).pop();
                   },
@@ -244,25 +254,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addFuente(Fuente f) {
-    /*double la = double.parse(f.latitud);
-    double lo = double.parse(f.latitud);
     MarkerId mid = MarkerId(f.id.toString());
     Marker m = Marker(
         visible: true,
         markerId: mid,
-        position: LatLng(la, lo),
+        position: LatLng(f.latitud, f.longitud),
         //infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
         icon: BitmapDescriptor.defaultMarkerWithHue(
           checkEstado(f),
-        ));*/
-    MarkerId mid = MarkerId("1");
+        ));
+    /*MarkerId mid = MarkerId("1");
     Marker m = Marker(
         markerId: mid,
         position: LatLng(39.511720, -0.356001),
         //infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueAzure,
-        ));
+        ));*/
     setState(() {
       markers[mid] = m;
     });
@@ -307,8 +315,8 @@ class _HomePageState extends State<HomePage> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
-      latitud = position.latitude.toString();
-      longitud = position.longitude.toString();
+      latitud = position.latitude;
+      longitud = position.longitude;
     });
   }
 
