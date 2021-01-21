@@ -61,6 +61,9 @@ class _HomePageState extends State<HomePage> {
   int n_fuentes;
 
   void initState() {
+    user = Provider.of<LoginState>(context, listen: false).user.user;
+    _userService = new UserService(user);
+    obtenerUbicacion();
     FirebaseDatabase db = FirebaseDatabase();
     _fuentesRef = db.reference().child('fuentes');
     _peticionesRef = db.reference().child('peticiones');
@@ -79,7 +82,16 @@ class _HomePageState extends State<HomePage> {
     _fuentesRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, value) {
-        print("clave: " + key.toString() + " valor: " + value.toString());
+        Map<dynamic, dynamic> fuentest = value;
+        Fuente f = new Fuente(
+            id: fuentest['id'].toString(), //Obtener valor n_fuentes de la bdd
+            nombre: fuentest['nombre'].toString(),
+            descripcion: fuentest['descripcion'].toString(),
+            latitud: double.parse(fuentest['latitud'].toString()),
+            longitud: double.parse(fuentest['longitud'].toString()),
+            usuario: fuentest['usuario'].toString());
+        fuentes[f.id] = f;
+        addFuente(f);
       });
     });
   }
@@ -104,9 +116,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<LoginState>(context, listen: false).user.user;
-    _userService = new UserService(user);
-    obtenerUbicacion();
     return Scaffold(
       drawer: Drawer(
         child: ListView(
