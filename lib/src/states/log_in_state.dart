@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginState with ChangeNotifier {
@@ -57,6 +58,46 @@ class LoginState with ChangeNotifier {
     notifyListeners();
   }
 
+  void logoutEmail() async {
+    _loggedIn = false;
+    _auth.signOut();
+    notifyListeners();
+  }
+
+  Future<UserCredential> signInEmail(String email, String password) async {
+    try {
+      _loggedIn = true;
+      print(_loggedIn);
+      user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Fluttertoast.showToast(
+            msg: "No se ha encontrado una cuenta con este email");
+      } else if (e.code == 'wrong-password') {
+        Fluttertoast.showToast(msg: "Contraseña incorrecta para este email");
+      }
+    }
+  }
+
+  Future<UserCredential> registerEmail(String email, String password) async {
+    UserCredential user;
+    try {
+      user = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Fluttertoast.showToast(msg: "Contraseña débil");
+      } else if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(msg: "Ya existe una cuenta con este email");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<UserCredential> _handleGoogleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
@@ -66,7 +107,7 @@ class LoginState with ChangeNotifier {
       idToken: googleAuth.idToken,
     );
     UserCredential user = await _auth.signInWithCredential(credential);
-    
+
     return user;
     /*final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);

@@ -2,7 +2,6 @@ import 'package:Fontana/models/fuente.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,7 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //Variables
-  bool filtrado = true;
+  bool filtrado = false;
 
   //Variables Database
   final referenceDatabase = FirebaseDatabase.instance;
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   String nombre = "";
   String descripcion = "";
   String estado = "";
-  bool usarUbicacion = true;
+  bool usarUbicacion = false;
 
   //Variables Fuentes
   Map<int, Fuente> fuentes = <int, Fuente>{};
@@ -68,10 +67,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    final ref = referenceDatabase.reference();
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
+    final ref = referenceDatabase.reference();
     obtenerUbicacion();
     return Scaffold(
       drawer: Drawer(
@@ -124,8 +122,11 @@ class _HomePageState extends State<HomePage> {
                   Provider.of<LoginState>(context, listen: false)
                       .logoutAnonymous();
                 } else {
-                  Provider.of<LoginState>(context, listen: false)
-                      .logoutGoogle();
+                  if (_userService.getProvider() == "google.com") {
+                    Provider.of<LoginState>(context, listen: false)
+                        .logoutGoogle();
+                  }
+                  Provider.of<LoginState>(context, listen: false).logoutEmail();
                 }
               },
             ),
@@ -166,13 +167,19 @@ class _HomePageState extends State<HomePage> {
           markers: Set<Marker>.of(markers.values),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          obtenerUbicacion();
-          addFuenteDialog(context);
-        },
-        label: Text('Añadir Fuente'),
-        icon: Icon(Icons.add),
+      floatingActionButton: Opacity(
+        opacity: user.isAnonymous ? 0 : 1,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            if (user.isAnonymous) {
+            } else {
+              obtenerUbicacion();
+              addFuenteDialog(context);
+            }
+          },
+          label: Text('Añadir Fuente'),
+          icon: Icon(Icons.add),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
@@ -251,7 +258,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Divider(),
                       SwitchListTile(
-                          title: Text('Escribir coordenadas / Usar ubicación'),
+                          title: RichText(
+                              text: TextSpan(
+                            text: "Usar ubicación/Escribir coordenadas",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                          )),
                           value: usarUbicacion,
                           onChanged: (value) {
                             setState(() {
@@ -481,12 +495,12 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancelar')),
+                  child: Text('Salir')),
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Ok')),
+                  child: Text('Enviar petición de cambio de información')),
             ],
           );
         });

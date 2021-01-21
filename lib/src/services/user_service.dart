@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class UserService {
   User user;
@@ -13,11 +12,14 @@ class UserService {
   }
 
   getImage() {
-    if (user.isAnonymous) {
-      this.imagen = AssetImage('assets/images/anonymous.png');
+    if (getProvider() == "google.com") {
+      this.imagen = NetworkImage(user.photoURL);
       return this.imagen;
     } else {
-      this.imagen = NetworkImage(user.photoURL);
+      if (user.isAnonymous) {
+        this.imagen = AssetImage('assets/images/anonymous.png');
+      }
+      this.imagen = AssetImage('assets/images/user.png');
       return this.imagen;
     }
   }
@@ -45,5 +47,10 @@ class UserService {
   String getUID() {
     this.uid = user.uid;
     return this.uid;
+  }
+
+  String getProvider() {
+    String provider = user.providerData[0].providerId;
+    return provider;
   }
 }
