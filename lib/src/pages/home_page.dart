@@ -77,10 +77,10 @@ class _HomePageState extends State<HomePage> {
 
   obtenerMarcadores() async {
     _fuentesRef.once().then((DataSnapshot snapshot) {
-      /* Map<dynamic, dynamic> values = snapshot.value;
+      Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, value) {
         print("clave: " + key.toString() + " valor: " + value.toString());
-      });*/
+      });
     });
   }
 
@@ -319,7 +319,6 @@ class _HomePageState extends State<HomePage> {
                         onChanged: (String s) {
                           double d = double.parse(s);
                           latitud = d;
-                          Fluttertoast.showToast(msg: latitud.toString());
                         },
                       ),
                       Divider(),
@@ -339,7 +338,6 @@ class _HomePageState extends State<HomePage> {
                         onChanged: (String s) {
                           double d = double.parse(s);
                           longitud = d;
-                          Fluttertoast.showToast(msg: longitud.toString());
                         },
                       ),
                     ],
@@ -356,9 +354,12 @@ class _HomePageState extends State<HomePage> {
               FlatButton(
                   onPressed: () {
                     //Código para añadir fuente local
+                    setState(() {
+                      n_fuentes++;
+                    });
+                    String idt = "0" + n_fuentes.toString();
                     Fuente f = new Fuente(
-                        id: n_fuentes
-                            .toString(), //Obtener valor n_fuentes de la bdd
+                        id: idt, //Obtener valor n_fuentes de la bdd
                         nombre: nombre,
                         descripcion: descripcion,
                         latitud: latitud,
@@ -366,7 +367,6 @@ class _HomePageState extends State<HomePage> {
                         usuario: _userService.getNombre());
                     setState(() {
                       fuentes[f.id] = f;
-                      n_fuentes++;
                     });
                     _fuentesRef.child(f.id).set({
                       "id": f.id,
@@ -518,7 +518,7 @@ class _HomePageState extends State<HomePage> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                              text: 'Añadida ppor:: ',
+                              text: 'Añadida por: ',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
