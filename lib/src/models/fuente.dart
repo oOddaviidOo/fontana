@@ -14,7 +14,7 @@ class Fuente {
     @required this.id,
     @required this.nombre,
     @required this.descripcion,
-    this.estado = "Pendiente de verificacion",
+    @required this.estado = "Pendiente de verificacion",
     @required this.latitud,
     @required this.longitud,
     @required this.usuario,
@@ -35,7 +35,7 @@ class Fuente {
         estado: json["estado"],
         latitud: json["latitud"].toDouble(),
         longitud: json["longitud"].toDouble(),
-        usuario: json["anyadida_por"],
+        usuario: json["usuario"],
       );
 
   Map<String, dynamic> toJson() => {

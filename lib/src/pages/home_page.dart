@@ -89,8 +89,11 @@ class _HomePageState extends State<HomePage> {
             descripcion: fuentest['descripcion'].toString(),
             latitud: double.parse(fuentest['latitud'].toString()),
             longitud: double.parse(fuentest['longitud'].toString()),
+            estado: fuentest['estado'].toString(),
             usuario: fuentest['usuario'].toString());
+
         fuentes[f.id] = f;
+
         addFuente(f);
       });
     });
@@ -193,7 +196,16 @@ class _HomePageState extends State<HomePage> {
                 child: filtrado
                     ? Icon(Icons.filter_alt)
                     : Icon(Icons.filter_alt_outlined)),
-          )
+          ),
+          Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GestureDetector(
+                  onTap: () {
+                    markers.clear();
+                    fuentes.clear();
+                    obtenerMarcadores();
+                  },
+                  child: Icon(Icons.history)))
         ],
       ),
       body: Container(
@@ -223,29 +235,6 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
   }
-
-  /*void initMarkers() {
-    //Inicializa la colección de markers con algunos en código
-    Marker fuente_plaza_almassera = Marker(
-        markerId: MarkerId('0'),
-        position: LatLng(39.511720, -0.356001),
-        //infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueAzure,
-        ));
-    markers.add(fuente_plaza_almassera);
-    Marker fuente_parque_almassera = Marker(
-        onTap: () {
-          infoFuente(context);
-        },
-        markerId: MarkerId('1'),
-        position: LatLng(39.509590, -0.354083),
-        //infoWindow: InfoWindow(title: 'Fuente parque almassera'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueCyan,
-        ));
-    markers.add(fuente_parque_almassera);
-  }*/
 
   void addFuenteDialog(BuildContext context) {
     StateSetter _setState;
@@ -413,14 +402,6 @@ class _HomePageState extends State<HomePage> {
         checkEstado(f),
       ),
     );
-    /*MarkerId mid = MarkerId("1");
-    Marker m = Marker(
-        markerId: mid,
-        position: LatLng(39.511720, -0.356001),
-        //infoWindow: InfoWindow(title: 'Fuente plaza almassera'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueAzure,
-        ));*/
     setState(() {
       markers[mid] = m;
     });
