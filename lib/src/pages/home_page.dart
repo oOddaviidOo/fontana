@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   //Variables Database
   final referenceDatabase = FirebaseDatabase.instance;
+  DatabaseReference ref;
 
   //Variables Auth
   User user;
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
-    final ref = referenceDatabase.reference();
+    ref = referenceDatabase.reference();
     obtenerUbicacion();
     return Scaffold(
       drawer: Drawer(
@@ -325,14 +326,21 @@ class _HomePageState extends State<HomePage> {
                   child: Text('Cancelar')),
               FlatButton(
                   onPressed: () {
-                    Fuente f = new Fuente(
+                    //Código para añadir fuente local
+                    /* Fuente f = new Fuente(
                         nombre, descripcion, latitud, longitud, user);
                     setState(() {
                       fuentes[f.id] = f;
                     });
                     f.mostrarDatos();
                     addFuente(f);
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();*/
+                    ref
+                        .child('fuentes')
+                        .push()
+                        .child('nombre')
+                        .set(nombre)
+                        .asStream();
                   },
                   child: Text('Añadir fuente')),
             ],
