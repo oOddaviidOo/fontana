@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Fontana/src/models/fuente.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   UserService _userService;
 
   //Variables Maps
+  Timer timer;
   GoogleMapController _mapController;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   int markers_count;
@@ -61,6 +64,8 @@ class _HomePageState extends State<HomePage> {
   int n_fuentes;
 
   void initState() {
+    timer =
+        Timer.periodic(Duration(seconds: 5), (Timer t) => recargarMarcadores());
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
     obtenerUbicacion();
@@ -99,6 +104,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void recargarMarcadores() {
+    markers.clear();
+    fuentes.clear();
+    obtenerMarcadores();
+    Fluttertoast.showToast(msg: "Mapa actualizado");
+  }
+
   obtenerNFuentes() async {
     _n_fuentesRef.once().then((DataSnapshot snapshot) {
       n_fuentes = int.parse(snapshot.value.toString());
@@ -114,6 +126,7 @@ class _HomePageState extends State<HomePage> {
     _editingControllerDesc.dispose();
     _editingControllerLat.dispose();
     _editingControllerLon.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -201,9 +214,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
                   onTap: () {
-                    markers.clear();
-                    fuentes.clear();
-                    obtenerMarcadores();
+                    recargarMarcadores();
                   },
                   child: Icon(Icons.history)))
         ],
@@ -238,6 +249,7 @@ class _HomePageState extends State<HomePage> {
 
   void addFuenteDialog(BuildContext context) {
     StateSetter _setState;
+    timer.cancel();
     showDialog(
         context: context,
         barrierDismissible: true,
