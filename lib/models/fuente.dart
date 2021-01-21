@@ -1,69 +1,49 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// To parse this JSON data, do
+//
+//     final fuente = fuenteFromJson(jsonString);
+
+import 'dart:convert';
+
+Fuente fuenteFromJson(String str) => Fuente.fromJson(json.decode(str));
+
+String fuenteToJson(Fuente data) => json.encode(data.toJson());
 
 class Fuente {
-  static int n_fuentes = 0;
-  String nombre = "";
-  String descripcion = "";
+  Fuente({
+    this.id,
+    this.nombre,
+    this.descripcion,
+    this.estado,
+    this.latitud,
+    this.longitud,
+    this.fotoUrl,
+  });
+
+  String id;
+  String nombre;
+  String descripcion;
   String estado;
   double latitud;
   double longitud;
-  String creada_por;
-  int id;
-  String get getNombre => nombre;
+  String fotoUrl;
 
-  set setNombre(String nombre) => this.nombre = nombre;
+  factory Fuente.fromJson(Map<String, dynamic> json) => Fuente(
+        id: json["id"],
+        nombre: json["nombre"],
+        descripcion: json["descripcion"],
+        estado: json["estado"],
+        latitud: json["latitud"].toDouble(),
+        longitud: json["longitud"].toDouble(),
+        fotoUrl: json["fotoURL"],
+      );
 
-  String get getDescripcion => descripcion;
-
-  set setDescripcion(String descripcion) => this.descripcion = descripcion;
-
-  String get getEstado => estado;
-
-  set setEstado(String estado) => this.estado = estado;
-
-  double get getLatitud => latitud;
-
-  set setLatitud(double latitud) => this.latitud = latitud;
-
-  double get getLongitud => longitud;
-
-  set setLongitud(double longitud) => this.longitud = longitud;
-
-  int get getId => id;
-
-  set setId(int id) => this.id = id;
-
-  void mostrarDatos() {
-    Fluttertoast.showToast(
-        msg: "Fuente:" +
-            "\nNombre: " +
-            this.nombre +
-            "\nDescripción: " +
-            this.descripcion +
-            "\nCoordenadas: " +
-            this.latitud.toString() +
-            ", " +
-            this.longitud.toString() +
-            "\nEstado: " +
-            this.estado +
-            "\nID: " +
-            this.id.toString() +
-            "\nCreada por: " +
-            this.creada_por +
-            "\nNumero de fuentes creadas:" +
-            n_fuentes.toString(),
-        toastLength: Toast.LENGTH_LONG);
-  }
-
-  Fuente(String n, String d, double la, double lo, User u) {
-    this.nombre = n;
-    this.descripcion = d;
-    this.estado = "Pendiente de verificación";
-    this.latitud = la;
-    this.longitud = lo;
-    this.id = n_fuentes + 1;
-    this.creada_por = u.displayName;
-    n_fuentes++;
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "nombre": nombre,
+        "descripcion": descripcion,
+        "estado": estado,
+        "latitud": latitud,
+        "longitud": longitud,
+        "fotoURL": fotoUrl,
+      };
 }

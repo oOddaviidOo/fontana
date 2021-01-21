@@ -2,6 +2,7 @@ import 'package:Fontana/models/fuente.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,7 +27,9 @@ class _HomePageState extends State<HomePage> {
 
   //Variables Database
   final referenceDatabase = FirebaseDatabase.instance;
+  DatabaseReference _fuentesRef;
   DatabaseReference ref;
+  FirebaseList firebaseList;
 
   //Variables Auth
   User user;
@@ -54,11 +57,13 @@ class _HomePageState extends State<HomePage> {
   Map<int, Fuente> fuentes = <int, Fuente>{};
 
   void initState() {
-    super.initState();
+    FirebaseDatabase db = FirebaseDatabase();
+    _fuentesRef = db.reference().child('fuentes');
     _editingControllerNom = TextEditingController();
     _editingControllerDesc = TextEditingController();
     _editingControllerLat = TextEditingController();
     _editingControllerLon = TextEditingController();
+    super.initState();
   }
 
   /*void dispose() {
@@ -70,6 +75,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
+
     ref = referenceDatabase.reference();
     obtenerUbicacion();
     return Scaffold(
@@ -464,29 +470,6 @@ class _HomePageState extends State<HomePage> {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: f.estado,
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 16),
-                                )
-                              ]),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                              text: 'Añadida por: ',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: f.creada_por,
                                   style: TextStyle(
                                       color: Colors.black54, fontSize: 16),
                                 )
