@@ -65,6 +65,7 @@ class LoginState with ChangeNotifier {
   }
 
   Future<UserCredential> signInEmail(String email, String password) async {
+    UserCredential user;
     try {
       _loggedIn = true;
       print(_loggedIn);

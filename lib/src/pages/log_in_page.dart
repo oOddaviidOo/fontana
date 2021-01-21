@@ -33,13 +33,13 @@ class LogInPage extends StatelessWidget {
               image: AssetImage('assets/images/logo1.2.png'),
               width: 200,
             ),
-            Divider(),
+            SizedBox(height: 20),
             RichText(
                 text: TextSpan(
               text: 'Inicia sesión para acceder a la app',
               style: TextStyle(color: Colors.black, fontSize: 18),
             )),
-            Divider(),
+            /*Divider(),
             SignInButtonBuilder(
               text: 'Inicio de sesión anónimo',
               icon: Icons.person,
@@ -64,7 +64,8 @@ class LogInPage extends StatelessWidget {
               backgroundColor: Colors.blueGrey[700],
               width: 220.0,
             ),
-            Divider(),
+            Divider(),*/
+            SizedBox(height: 20),
             SignInButton(
               Buttons.Google,
               text: 'Inicio de sesión con Google',
@@ -72,8 +73,8 @@ class LogInPage extends StatelessWidget {
                 Provider.of<LoginState>(context, listen: false).loginGoogle();
               },
             ),
-            Divider(),
-            RichText(
+            //Divider(),
+            /* RichText(
               text: TextSpan(
                   text: '¿No tienes una cuenta?',
                   style: TextStyle(color: Colors.black, fontSize: 18),
@@ -92,7 +93,7 @@ class LogInPage extends StatelessWidget {
                             ));
                           })
                   ]),
-            ),
+            ),*/
           ],
         ),
       ),

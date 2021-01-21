@@ -1,4 +1,4 @@
-import 'package:Fontana/models/fuente.dart';
+import 'package:Fontana/src/models/fuente.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   bool usarUbicacion = false;
 
   //Variables Fuentes
-  Map<int, Fuente> fuentes = <int, Fuente>{};
+  Map<String, Fuente> fuentes = <String, Fuente>{};
 
   void initState() {
     FirebaseDatabase db = FirebaseDatabase();
@@ -66,10 +66,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  /*void dispose() {
+  void dispose() {
     _editingControllerNom.dispose();
+    _editingControllerDesc.dispose();
+    _editingControllerLat.dispose();
+    _editingControllerLon.dispose();
     super.dispose();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,19 +177,13 @@ class _HomePageState extends State<HomePage> {
           markers: Set<Marker>.of(markers.values),
         ),
       ),
-      floatingActionButton: Opacity(
-        opacity: user.isAnonymous ? 0 : 1,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            if (user.isAnonymous) {
-            } else {
-              obtenerUbicacion();
-              addFuenteDialog(context);
-            }
-          },
-          label: Text('Añadir Fuente'),
-          icon: Icon(Icons.add),
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          obtenerUbicacion();
+          addFuenteDialog(context);
+        },
+        label: Text('Añadir Fuente'),
+        icon: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
@@ -333,20 +330,27 @@ class _HomePageState extends State<HomePage> {
               FlatButton(
                   onPressed: () {
                     //Código para añadir fuente local
-                    /* Fuente f = new Fuente(
-                        nombre, descripcion, latitud, longitud, user);
+                    Fuente f = new Fuente(
+                        id: "1", //Obtener valor n_fuentes de la bdd
+                        nombre: nombre,
+                        descripcion: descripcion,
+                        latitud: latitud,
+                        longitud: longitud,
+                        usuario: _userService.getNombre());
+                    Fluttertoast.showToast(msg: f.toString());
                     setState(() {
                       fuentes[f.id] = f;
                     });
-                    f.mostrarDatos();
+                    ref.child('fuentes').child(f.id).set({
+                      "nombre": f.nombre,
+                      "descripcion": f.descripcion,
+                      "estado": "Pendiente de verificacion",
+                      "latitud": f.latitud,
+                      "longitud": f.longitud,
+                      "usuario": f.usuario,
+                    }).asStream();
                     addFuente(f);
-                    Navigator.of(context).pop();*/
-                    ref
-                        .child('fuentes')
-                        .push()
-                        .child('nombre')
-                        .set(nombre)
-                        .asStream();
+                    Navigator.of(context).pop();
                   },
                   child: Text('Añadir fuente')),
             ],
@@ -355,7 +359,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addFuente(Fuente f) {
-    MarkerId mid = MarkerId(f.id.toString());
+    MarkerId mid = MarkerId(f.id);
     Marker m = Marker(
       visible: true,
       markerId: mid,
@@ -470,6 +474,29 @@ class _HomePageState extends State<HomePage> {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: f.estado,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Añadida ppor:: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: f.usuario,
                                   style: TextStyle(
                                       color: Colors.black54, fontSize: 16),
                                 )

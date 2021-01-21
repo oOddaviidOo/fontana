@@ -2,6 +2,7 @@
 //
 //     final fuente = fuenteFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Fuente fuenteFromJson(String str) => Fuente.fromJson(json.decode(str));
@@ -10,13 +11,13 @@ String fuenteToJson(Fuente data) => json.encode(data.toJson());
 
 class Fuente {
   Fuente({
-    this.id,
-    this.nombre,
-    this.descripcion,
-    this.estado,
-    this.latitud,
-    this.longitud,
-    this.fotoUrl,
+    @required this.id,
+    @required this.nombre,
+    @required this.descripcion,
+    this.estado = "Pendiente de verificacion",
+    @required this.latitud,
+    @required this.longitud,
+    @required this.usuario,
   });
 
   String id;
@@ -25,7 +26,7 @@ class Fuente {
   String estado;
   double latitud;
   double longitud;
-  String fotoUrl;
+  String usuario;
 
   factory Fuente.fromJson(Map<String, dynamic> json) => Fuente(
         id: json["id"],
@@ -34,7 +35,7 @@ class Fuente {
         estado: json["estado"],
         latitud: json["latitud"].toDouble(),
         longitud: json["longitud"].toDouble(),
-        fotoUrl: json["fotoURL"],
+        usuario: json["anyadida_por"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +45,6 @@ class Fuente {
         "estado": estado,
         "latitud": latitud,
         "longitud": longitud,
-        "fotoURL": fotoUrl,
+        "anyadida_por": usuario,
       };
 }
