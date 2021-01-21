@@ -27,8 +27,11 @@ class _HomePageState extends State<HomePage> {
 
   //Variables Database
   final referenceDatabase = FirebaseDatabase.instance;
+  DatabaseReference _fuentes;
   DatabaseReference _fuentesRef;
-  DatabaseReference ref;
+  DatabaseReference _peticionesRef;
+  DatabaseReference _n_fuentesRef;
+  Query _fuentesOrdNomQ;
   FirebaseList firebaseList;
 
   //Variables Auth
@@ -55,15 +58,40 @@ class _HomePageState extends State<HomePage> {
 
   //Variables Fuentes
   Map<String, Fuente> fuentes = <String, Fuente>{};
+  int n_fuentes;
 
   void initState() {
     FirebaseDatabase db = FirebaseDatabase();
     _fuentesRef = db.reference().child('fuentes');
+    _peticionesRef = db.reference().child('peticiones');
+    _n_fuentesRef = db.reference().child('n_fuentes');
+    _fuentesOrdNomQ = db.reference().child('fuentes').orderByChild('nombre');
     _editingControllerNom = TextEditingController();
     _editingControllerDesc = TextEditingController();
     _editingControllerLat = TextEditingController();
     _editingControllerLon = TextEditingController();
+    obtenerNFuentes();
+    obtenerMarcadores();
     super.initState();
+  }
+
+  obtenerMarcadores() async {
+    _fuentesRef.once().then((DataSnapshot snapshot) {
+      /* Map<dynamic, dynamic> values = snapshot.value;
+      values.forEach((key, value) {
+        print("clave: " + key.toString() + " valor: " + value.toString());
+      });*/
+    });
+  }
+
+  obtenerNFuentes() async {
+    _n_fuentesRef.once().then((DataSnapshot snapshot) {
+      n_fuentes = int.parse(snapshot.value.toString());
+    });
+  }
+
+  updateNFuentes() async {
+    _n_fuentesRef.parent().update({"n_fuentes": n_fuentes});
   }
 
   void dispose() {
@@ -78,8 +106,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     user = Provider.of<LoginState>(context, listen: false).user.user;
     _userService = new UserService(user);
-
-    ref = referenceDatabase.reference();
     obtenerUbicacion();
     return Scaffold(
       drawer: Drawer(
@@ -331,17 +357,19 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     //Código para añadir fuente local
                     Fuente f = new Fuente(
-                        id: "1", //Obtener valor n_fuentes de la bdd
+                        id: n_fuentes
+                            .toString(), //Obtener valor n_fuentes de la bdd
                         nombre: nombre,
                         descripcion: descripcion,
                         latitud: latitud,
                         longitud: longitud,
                         usuario: _userService.getNombre());
-                    Fluttertoast.showToast(msg: f.toString());
                     setState(() {
                       fuentes[f.id] = f;
+                      n_fuentes++;
                     });
-                    ref.child('fuentes').child(f.id).set({
+                    _fuentesRef.child(f.id).set({
+                      "id": f.id,
                       "nombre": f.nombre,
                       "descripcion": f.descripcion,
                       "estado": "Pendiente de verificacion",
@@ -349,6 +377,7 @@ class _HomePageState extends State<HomePage> {
                       "longitud": f.longitud,
                       "usuario": f.usuario,
                     }).asStream();
+                    updateNFuentes();
                     addFuente(f);
                     Navigator.of(context).pop();
                   },
