@@ -130,6 +130,8 @@ class _HomePageState extends State<HomePage> {
   void recargarMarcadores() {
     markers.clear();
     fuentes.clear();
+    obtenerNFuentes();
+    obtenerNPeticiones();
     obtenerMarcadores();
     //Fluttertoast.showToast(msg: "Mapa actualizado");
   }
