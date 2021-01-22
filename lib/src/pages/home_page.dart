@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, value) {
         Map<dynamic, dynamic> fuentest = value;
+
         Fuente f = new Fuente(
             id: fuentest['id'].toString(), //Obtener valor n_fuentes de la bdd
             nombre: fuentest['nombre'].toString(),
@@ -95,9 +96,15 @@ class _HomePageState extends State<HomePage> {
             estado: fuentest['estado'].toString(),
             usuario: fuentest['usuario'].toString());
 
-        fuentes[f.id] = f;
-
-        addFuente(f);
+        if (filtrado) {
+          if (f.estado == "Verificada") {
+            fuentes[f.id] = f;
+            addFuente(f);
+          }
+        } else {
+          fuentes[f.id] = f;
+          addFuente(f);
+        }
       });
     });
   }
@@ -202,18 +209,24 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     filtrado = !filtrado;
                   });
+                  if (filtrado) {
+                    Fluttertoast.showToast(
+                        msg: "Mostrando solo fuentes verificadas");
+                  } else {
+                    Fluttertoast.showToast(msg: "Mostrando todas las fuentes");
+                  }
                 },
                 child: filtrado
                     ? Icon(Icons.filter_alt)
                     : Icon(Icons.filter_alt_outlined)),
-          ),
+          ), /*
           Padding(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
                   onTap: () {
                     recargarMarcadores();
                   },
-                  child: Icon(Icons.history)))
+                  child: Icon(Icons.history)))*/
         ],
       ),
       body: Container(
@@ -639,6 +652,8 @@ class _HomePageState extends State<HomePage> {
         return BitmapDescriptor.hueCyan;
       case "Verificada":
         return BitmapDescriptor.hueAzure;
+      case "Averiada":
+        return BitmapDescriptor.hueOrange;
       default:
         return BitmapDescriptor.hueCyan;
     }
