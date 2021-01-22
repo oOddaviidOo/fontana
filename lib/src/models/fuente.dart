@@ -14,7 +14,7 @@ class Fuente {
     @required this.id,
     @required this.nombre,
     @required this.descripcion,
-    @required this.estado = "Pendiente de verificacion",
+    this.estado = "Pendiente de verificacion",
     @required this.latitud,
     @required this.longitud,
     @required this.usuario,

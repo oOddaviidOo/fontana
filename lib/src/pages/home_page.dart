@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   DatabaseReference _fuentesRef;
   DatabaseReference _peticionesRef;
   DatabaseReference _n_fuentesRef;
-  Query _fuentesOrdNomQ;
   FirebaseList firebaseList;
 
   //Variables Auth
@@ -73,7 +72,6 @@ class _HomePageState extends State<HomePage> {
     _fuentesRef = db.reference().child('fuentes');
     _peticionesRef = db.reference().child('peticiones');
     _n_fuentesRef = db.reference().child('n_fuentes');
-    _fuentesOrdNomQ = db.reference().child('fuentes').orderByChild('nombre');
     _editingControllerNom = TextEditingController();
     _editingControllerDesc = TextEditingController();
     _editingControllerLat = TextEditingController();
@@ -108,7 +106,7 @@ class _HomePageState extends State<HomePage> {
     markers.clear();
     fuentes.clear();
     obtenerMarcadores();
-    Fluttertoast.showToast(msg: "Mapa actualizado");
+    //Fluttertoast.showToast(msg: "Mapa actualizado");
   }
 
   obtenerNFuentes() async {
@@ -126,7 +124,6 @@ class _HomePageState extends State<HomePage> {
     _editingControllerDesc.dispose();
     _editingControllerLat.dispose();
     _editingControllerLon.dispose();
-    timer?.cancel();
     super.dispose();
   }
 
@@ -247,9 +244,75 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void peticionDialog(Fuente f) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
+            title: RichText(
+                text: TextSpan(
+              text: "Petición",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            )),
+            content: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Descripción: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: f.descripcion,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 16),
+                                )
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                children: [
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancelar')),
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Enviar petición')),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
   void addFuenteDialog(BuildContext context) {
     StateSetter _setState;
-    timer.cancel();
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -540,16 +603,21 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Salir')),
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Enviar petición de cambio de información')),
+              Row(
+                children: [
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Salir')),
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        peticionDialog(f);
+                      },
+                      child: Text('Enviar petición de actualización')),
+                ],
+              )
             ],
           );
         });
