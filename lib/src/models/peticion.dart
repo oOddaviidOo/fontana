@@ -2,6 +2,7 @@
 //
 //     final peticion = peticionFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Peticion peticionFromJson(String str) => Peticion.fromJson(json.decode(str));
@@ -10,40 +11,32 @@ String peticionToJson(Peticion data) => json.encode(data.toJson());
 
 class Peticion {
   Peticion({
-    this.id,
-    this.idFuente,
-    this.descripcion,
-    this.tipo,
-    this.votospos,
-    this.votosneg,
-    this.usuario,
+    @required this.id,
+    @required this.idFuente,
+    @required this.motivo,
+    @required this.tipo,
+    @required this.usuario,
   });
 
   String id;
   String idFuente;
-  String descripcion;
+  String motivo;
   String tipo;
-  int votospos;
-  int votosneg;
   String usuario;
 
   factory Peticion.fromJson(Map<String, dynamic> json) => Peticion(
         id: json["id"],
         idFuente: json["idFuente"],
-        descripcion: json["descripcion"],
+        motivo: json["motivo"],
         tipo: json["tipo"],
-        votospos: json["votospos"],
-        votosneg: json["votosneg"],
         usuario: json["usuario"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "idFuente": idFuente,
-        "descripcion": descripcion,
+        "motivo": motivo,
         "tipo": tipo,
-        "votospos": votospos,
-        "votosneg": votosneg,
         "usuario": usuario,
       };
 }

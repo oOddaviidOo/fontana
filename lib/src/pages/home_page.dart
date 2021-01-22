@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Fontana/src/models/fuente.dart';
+import 'package:Fontana/src/models/peticion.dart';
 import 'package:Fontana/src/pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   DatabaseReference _fuentesRef;
   DatabaseReference _peticionesRef;
   DatabaseReference _n_fuentesRef;
+  DatabaseReference _n_peticionesRef;
   FirebaseList firebaseList;
 
   //Variables Auth
@@ -53,14 +55,27 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _editingControllerDesc;
   TextEditingController _editingControllerLat;
   TextEditingController _editingControllerLon;
+  TextEditingController _editingControllerMot;
   String nombre = "";
   String descripcion = "";
   String estado = "";
   bool usarUbicacion = false;
+  List<String> dropdownops = [
+    "Verificada",
+    "Averiada",
+    "Pendiente de eliminacion",
+    "Pendiente de cambio de ubicacion"
+  ];
+  String opdropdown = 'Verificada';
+  String motivo;
 
   //Variables Fuentes
   Map<String, Fuente> fuentes = <String, Fuente>{};
   int n_fuentes;
+
+  //Variables Peticiones
+  Map<String, Peticion> peticiones = <String, Peticion>{};
+  int n_peticiones;
 
   void initState() {
     timer =
@@ -72,11 +87,14 @@ class _HomePageState extends State<HomePage> {
     _fuentesRef = db.reference().child('fuentes');
     _peticionesRef = db.reference().child('peticiones');
     _n_fuentesRef = db.reference().child('n_fuentes');
+    _n_peticionesRef = db.reference().child('n_peticiones');
     _editingControllerNom = TextEditingController();
     _editingControllerDesc = TextEditingController();
     _editingControllerLat = TextEditingController();
     _editingControllerLon = TextEditingController();
+    _editingControllerMot = TextEditingController();
     obtenerNFuentes();
+    obtenerNPeticiones();
     obtenerMarcadores();
     super.initState();
   }
@@ -122,8 +140,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  obtenerNPeticiones() async {
+    _n_peticionesRef.once().then((DataSnapshot snapshot) {
+      n_peticiones = int.parse(snapshot.value.toString());
+    });
+  }
+
   updateNFuentes() async {
     _n_fuentesRef.parent().update({"n_fuentes": n_fuentes});
+  }
+
+  updateNPeticiones() async {
+    _n_peticionesRef.parent().update({"n_peticiones": n_peticiones});
   }
 
   void dispose() {
@@ -131,6 +159,7 @@ class _HomePageState extends State<HomePage> {
     _editingControllerDesc.dispose();
     _editingControllerLat.dispose();
     _editingControllerLon.dispose();
+    _editingControllerMot.dispose();
     super.dispose();
   }
 
@@ -257,7 +286,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<DropdownMenuItem<String>> getOpcionesDropdown() {
+    List<DropdownMenuItem<String>> lista = new List();
+    dropdownops.forEach((op) {
+      lista.add(DropdownMenuItem(
+        child: Text(op),
+        value: op,
+      ));
+    });
+    return lista;
+  }
+
   void peticionDialog(Fuente f) {
+    StateSetter _setState;
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -267,43 +308,69 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(30.0)),
             title: RichText(
                 text: TextSpan(
-              text: "Petición",
+              text: ("Petición para " + f.nombre),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             )),
-            content: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              _setState = setState;
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _editingControllerMot,
+                      decoration: InputDecoration(
+                          hintText: 'Motivo de la peticion',
+                          labelText: 'Motivo de la peticion',
+                          helperText: 'Verificar fuente/Fuente averiada',
+                          //icon: Icon(Icons.account_circle),
+                          //prefixIcon: Icon(Icons.title)
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0))),
+                      onChanged: (String s) {
+                        motivo = s;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
                         child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                              text: 'Descripción: ',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: f.descripcion,
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 16),
-                                )
-                              ]),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                          text: 'Introduce el nuevo estado: ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                          )),
+                    )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: DropdownButton(
+                            value: opdropdown,
+                            items: getOpcionesDropdown(),
+                            onChanged: (opt) {
+                              setState(() {
+                                opdropdown = opt;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }),
             actions: <Widget>[
               Row(
                 children: [
@@ -314,6 +381,28 @@ class _HomePageState extends State<HomePage> {
                       child: Text('Cancelar')),
                   FlatButton(
                       onPressed: () {
+                        setState(() {
+                          n_peticiones++;
+                        });
+                        String idt = "0" + n_peticiones.toString();
+                        Peticion p = new Peticion(
+                            id: idt, //Obtener valor n_fuentes de la bdd
+                            idFuente: f.id,
+                            motivo: motivo,
+                            tipo: opdropdown,
+                            usuario: _userService.getNombre());
+                        setState(() {
+                          peticiones[p.id] = p;
+                        });
+                        _peticionesRef.child(p.id).set({
+                          "id": p.id,
+                          "idFuente": p.idFuente,
+                          "motivo": p.motivo,
+                          "tipo": p.tipo,
+                          "usuario": f.usuario,
+                        }).asStream();
+                        updateNPeticiones();
+                        Fluttertoast.showToast(msg: "Peticion enviada");
                         Navigator.of(context).pop();
                       },
                       child: Text('Enviar petición')),
@@ -648,11 +737,15 @@ class _HomePageState extends State<HomePage> {
 
   double checkEstado(Fuente f) {
     switch (f.estado) {
-      case "Pendiente de Verificación":
+      case "Pendiente de verificación":
         return BitmapDescriptor.hueCyan;
       case "Verificada":
         return BitmapDescriptor.hueAzure;
       case "Averiada":
+        return BitmapDescriptor.hueYellow;
+      case "Pendiente de eliminacion":
+        return BitmapDescriptor.hueRed;
+      case "Pendiente de cambio de ubicacion":
         return BitmapDescriptor.hueOrange;
       default:
         return BitmapDescriptor.hueCyan;
