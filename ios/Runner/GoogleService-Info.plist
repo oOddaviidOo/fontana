@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>320097593767-vsf9f6oude12boj4fmkavpctr1l5fk5d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.320097593767-vsf9f6oude12boj4fmkavpctr1l5fk5d</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>320097593767-psku7mvsje5ieik0hthhcp8fq3oljl5l.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAEV9Kt0ltqC8LjMTLgefGpo5lPD6ebLbQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>320097593767</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dhc.fontana</string>
+	<key>PROJECT_ID</key>
+	<string>fontana-dhc0001</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fontana-dhc0001.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:320097593767:ios:bc2366717b206525842e82</string>
+	<key>DATABASE_URL</key>
+	<string>https://fontana-dhc0001.firebaseio.com</string>
+</dict>
+</plist>
