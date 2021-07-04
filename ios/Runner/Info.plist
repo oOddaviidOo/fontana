@@ -11,7 +11,8 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>fontana</string>
+	<!-- TEST[D]: check iOs app launcher name once able to test iOs code -->
+	<string>Fontana</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
