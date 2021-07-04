@@ -1,6 +1,6 @@
-# fontana
+# Fontana
 
-A new Flutter project.
+An app to search for potable water fountains.
 
 ## Getting Started
 
