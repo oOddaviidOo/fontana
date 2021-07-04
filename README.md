@@ -17,5 +17,5 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Changelog
 
-Refer to [CHANGELOG.mf](https://github.com/oOddaviidOo/fontana/blob/master/CHANGELOG.md)
+Refer to [CHANGELOG.md](https://github.com/oOddaviidOo/fontana/blob/master/CHANGELOG.md)
 
