@@ -1,4 +1,4 @@
-package com.example.fontana
+package com.dhcs.fontana
 
 import io.flutter.embedding.android.FlutterActivity
 
