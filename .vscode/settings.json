@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "app-launcher-icon"
+        "app-launcher-icon",
+        "app"
     ]
 }
