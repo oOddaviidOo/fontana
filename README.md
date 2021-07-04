@@ -1,3 +1,16 @@
-# Proyecto del Grado Superior
- Consiste en una aplicación para Android e IOs que muestra la ubicación de fuentes de agua potable.
-![Alt text](https://raw.githubusercontent.com/oOddaviidOo/fontana/main/assets/images/logo1.2.png)
+# fontana
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
