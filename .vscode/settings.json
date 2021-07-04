@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "app-launcher-icon",
-        "app"
+        "app",
+        "changelog.md"
     ]
 }
